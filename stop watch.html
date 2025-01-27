@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fad0c4);
+            color: #333;
+            text-align: center;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .quote {
+            font-size: 1.5rem;
+            font-style: italic;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        .stopwatch {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            width: 350px;
+        }
+
+        .timer {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .controls button {
+            background: #ff6f61;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .controls button:hover {
+            background: #ff8c85;
+        }
+
+        .lap-list {
+            margin-top: 20px;
+            max-height: 150px;
+            overflow-y: auto;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        .lap-list li {
+            background: #ffefd5;
+            margin: 5px 0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="quote">"Time is what we want most, but what we use worst."</div>
+    <div class="stopwatch">
+        <div class="timer">00:00:00</div>
+        <div class="controls">
+            <button onclick="startStopwatch()">Start</button>
+            <button onclick="pauseStopwatch()">Pause</button>
+            <button onclick="resetStopwatch()">Reset</button>
+            <button onclick="lapTime()">Lap</button>
+        </div>
+        <ul class="lap-list"></ul>
+    </div>
+
+    <script>
+        let timerElement = document.querySelector('.timer');
+        let lapList = document.querySelector('.lap-list');
+
+        let timer = 0;
+        let interval = null;
+        let isRunning = false;
+
+        function formatTime(time) {
+            let hours = Math.floor(time / 3600);
+            let minutes = Math.floor((time % 3600) / 60);
+            let seconds = time % 60;
+
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+
+            return `${hours}:${minutes}:${seconds}`;
+        }
+
+        function updateTimerDisplay() {
+            timerElement.textContent = formatTime(timer);
+        }
+
+        function startStopwatch() {
+            if (!isRunning) {
+                isRunning = true;
+                interval = setInterval(() => {
+                    timer++;
+                    updateTimerDisplay();
+                }, 1000);
+            }
+        }
+
+        function pauseStopwatch() {
+            if (isRunning) {
+                isRunning = false;
+                clearInterval(interval);
+            }
+        }
+
+        function resetStopwatch() {
+            pauseStopwatch();
+            timer = 0;
+            updateTimerDisplay();
+            lapList.innerHTML = '';
+        }
+
+        function lapTime() {
+            if (isRunning) {
+                const lapItem = document.createElement('li');
+                lapItem.textContent = formatTime(timer);
+                lapList.appendChild(lapItem);
+            }
+        }
+    </script>
+</body>
+</html>
