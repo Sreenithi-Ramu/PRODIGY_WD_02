@@ -1,0 +1,1 @@
+https://onecompiler.com/html/437eh7jv9     this online compiler provide code and output
